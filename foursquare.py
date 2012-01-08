@@ -19,6 +19,25 @@ class FoursquareMixin(object):
     def httpclient_instance(self):
         return httpclient.AsyncHTTPClient()
 
+
+    def authorize_redirect(self, redirect_uri=None, client_id=None, **kwargs):
+        """Redirects the user to obtain OAuth authorization for this service.
+
+        Some providers require that you register a Callback
+        URL with your application. You should call this method to log the
+        user in, and then call get_authenticated_user() in the handler
+        you registered as your Callback URL to complete the authorization
+        process.
+        """
+        args = {
+          "redirect_uri": redirect_uri,
+          "client_id": client_id,
+          "response_type": "code"
+        }
+        if kwargs: args.update(kwargs)
+        self.redirect(url_concat(self._OAUTH_AUTHENTICATE_URL, args))       # Why _OAUTH_AUTHORIZE_URL fails?
+
+
     def get_authenticated_user(self, redirect_uri, client_id, client_secret, code, callback):
         """
         Handles the login for the Foursquare user, returning a user object.
@@ -52,44 +71,13 @@ class FoursquareMixin(object):
             "code": code,
             "client_id": client_id,
             "client_secret": client_secret,
+            "grant_type": "authorization_code"
         }
 
         self.httpclient_instance.fetch(
-            self._oauth_request_token_url(**args),
+            url_concat(self._OAUTH_ACCESS_TOKEN_URL, args),
             self.async_callback(self._on_access_token, redirect_uri, client_id, client_secret, callback)
         )
-
-
-    def authorize_redirect(self, redirect_uri=None, client_id=None,
-                           client_secret=None, extra_params=None ):
-        """Redirects the user to obtain OAuth authorization for this service.
-
-        Some providers require that you register a Callback
-        URL with your application. You should call this method to log the
-        user in, and then call get_authenticated_user() in the handler
-        you registered as your Callback URL to complete the authorization
-        process.
-        """
-        args = {
-          "redirect_uri": redirect_uri,
-          "client_id": client_id,
-          "response_type": "code"
-        }
-        if extra_params: args.update(extra_params)
-        self.redirect(url_concat(self._OAUTH_AUTHENTICATE_URL, args))       # Why _OAUTH_AUTHORIZE_URL fails?
-
-
-    def _oauth_request_token_url(self, redirect_uri= None, client_id = None, client_secret=None, code=None, extra_params=None):
-        url = self._OAUTH_ACCESS_TOKEN_URL
-        args = dict(
-            redirect_uri=redirect_uri,
-            code=code,
-            client_id=client_id,
-            client_secret=client_secret,
-            grant_type="authorization_code"
-            )
-        if extra_params: args.update(extra_params)
-        return url_concat(url, args)
 
 
     def _on_access_token(self, redirect_uri, client_id, client_secret, callback, response):
