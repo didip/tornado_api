@@ -1,0 +1,2 @@
+from foursquare import FoursquareMixin
+from facebook import FacebookGraphMixin
