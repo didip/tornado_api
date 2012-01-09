@@ -25,7 +25,6 @@ class FoursquareMixin(object):
     _OAUTH_ACCESS_TOKEN_URL = "https://foursquare.com/oauth2/access_token"
     _OAUTH_AUTHORIZE_URL    = "https://foursquare.com/oauth2/authorize"
     _OAUTH_AUTHENTICATE_URL = "https://foursquare.com/oauth2/authenticate"
-    _OAUTH_NO_CALLBACKS = False
 
     _BASE_URL = "https://api.foursquare.com/v2"
 

@@ -25,7 +25,6 @@ class FacebookGraphMixin(object):
 
     _OAUTH_ACCESS_TOKEN_URL = "https://graph.facebook.com/oauth/access_token"
     _OAUTH_AUTHORIZE_URL    = "https://graph.facebook.com/oauth/authorize"
-    _OAUTH_NO_CALLBACKS     = False
 
     _BASE_URL = "https://graph.facebook.com"
 
