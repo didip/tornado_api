@@ -147,8 +147,12 @@ class FoursquareMixin(object):
 
 
     def _on_foursquare_request(self, callback, response):
+        response_body = escape.json_decode(response.body)
         if response.error:
-            logging.warning("Error response %s fetching %s", response.error, response.request.url)
+            logging.warning(
+                "Foursquare Error(%s) :: Detail: %s, Message: %s, URL: %s",
+                response.error, response_body["meta"]["errorDetail"], response_body["meta"]["errorMessage"], response.request.url
+            )
             callback(None)
             return
-        callback(escape.json_decode(response.body))
+        callback(response_body)
