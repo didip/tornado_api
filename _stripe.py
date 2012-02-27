@@ -68,19 +68,27 @@ class Stripe(object):
 
 
     def get(self, **kwargs):
-        if self.blocking:
-            http_response = self._call('GET', **kwargs)
-            return self._parse_response(None, http_response)
-        else:
-            self._call('GET', **kwargs)
+        return self._call_check_blocking_first('GET', **kwargs)
 
 
     def post(self, **kwargs):
-        self._call('POST', **kwargs)
+        return self._call_check_blocking_first('POST', **kwargs)
+
+
+    def put(self, **kwargs):
+        return self._call_check_blocking_first('PUT', **kwargs)
 
 
     def delete(self, **kwargs):
-        self._call('DELETE', **kwargs)
+        return self._call_check_blocking_first('DELETE', **kwargs)
+
+
+    def _call_check_blocking_first(self, http_method, **kwargs):
+        if self.blocking:
+            http_response = self._call(http_method, **kwargs)
+            return self._parse_response(None, http_response)
+        else:
+            return self._call(http_method, **kwargs)
 
 
     def _call(self, http_method, callback=None, **kwargs):
