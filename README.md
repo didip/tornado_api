@@ -10,7 +10,7 @@ Re-implementation of Tornado's OAuth2 Mixin.
 
 ## FoursquareMixin
 
-OAuth2 Mixin for Foursquare.
+OAuth2 Mixin for Foursquare. Once authorized via authorize_redirect(), you can call Foursquare API using foursquare_request()
 
 
 ## tornado_api.Stripe
@@ -143,7 +143,7 @@ POST
     	'id': 'stripe-test-gold'
  	}
   	stripe = tornado_api.Stripe(YOUR_STRIPE_API_KEY)
-	self.stripe.plans.post(**DUMMY_PLAN)
+	stripe.plans.post(**DUMMY_PLAN)
 ```
 
 DELETE
@@ -165,4 +165,4 @@ Based on [Twitter module](http://mike.verdone.ca/twitter/). The only 2 differenc
 
   * The HTTP client have been replaced by Tornado AsyncHTTPClient.
 
-  * __call__() accepts _callback as keyword argument.
+  * \_\_call\_\_() accepts _callback as keyword argument.
