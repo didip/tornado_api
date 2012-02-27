@@ -16,9 +16,8 @@
 
 import logging
 
-import ujson
 import twitter
-from tornado import httpclient
+from tornado import httpclient, escape
 
 class Twitter(twitter.Twitter):
     """
@@ -104,7 +103,7 @@ class Twitter(twitter.Twitter):
                 return
 
             if self.format == "json":
-                callback(ujson.decode(response.body))
+                callback(escape.json_decode(response.body))
             else:
                 callback(response.body)
         return call_me_later
